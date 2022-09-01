@@ -69,22 +69,32 @@
             <h4 class="modal-title">Extra Settings</h4>
           </div>
           <div class="modal-body">
-            <p class="lead">
-              Requests to the lastfm api can be rate limited or fail, use these settings if you start having problems
-            </p>
-            <div class="form-group">
-              <label for="api-key">
-                alternate api key
-              </label>
-              <input type="text" class="form-control input-md" id="api-key" placeholder="0123456789abcdef0123456789abcdef" rv-value="api_key">
-              <p class="help-block">Use an alternative api key - generate one at <a href="http://www.last.fm/api">last.fm/api</a></p>
+            <div>
+              <p class="lead">
+                Requests to the lastfm api can be rate limited or fail, use these settings if you start having problems
+              </p>
+              <div class="form-group">
+                <label for="api-key">
+                  alternate api key
+                </label>
+                <input type="text" class="form-control input-md" id="api-key" placeholder="0123456789abcdef0123456789abcdef" rv-value="api_key">
+                <p class="help-block">Use an alternative api key - generate one at <a href="http://www.last.fm/api">last.fm/api</a></p>
+              </div>
+              <div class="form-group">
+                <label for="request-delay">
+                  request delay
+                </label>
+                <input type="text" class="form-control input-md" id="request-delay" placeholder="0"  rv-value="request_delay">
+                <p class="help-block">(milliseconds, default 0) how long to wait between making requests</p>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="request-delay">
-                request delay
-              </label>
-              <input type="text" class="form-control input-md" id="request-delay" placeholder="0"  rv-value="request_delay">
-              <p class="help-block">(milliseconds, default 0) how long to wait between making requests</p>
+            <div>
+              <p class="lead">Additional data may be useful, use these settings if you want to extend default dataset</p>
+              <div class="form-group form-inline">
+                <input type="checkbox" class="form-control" name="lastfm-include-date-utc" id="lastfm-include-date-utc">
+                <label for="lastfm-include-date-utc">Include dates in UTC format</label>
+                <p class="help-block">Include dates in UTC format to simplify automatic processing of the received data</p>
+              </div>
             </div>
           </div>
         </div>
@@ -152,9 +162,14 @@
         // the data that will be filled with csv
         data = [];
 
-        var delay = $('request-delay').val() || 0,
+        var headers = ['artist', 'album', 'name', 'date'],
+            delay = $('request-delay').val() || 0,
             key   = $('api-key').val() || '974a5ebc077564f72bd639d122479d4b',
             user  = $('[name=lastfm-user]').val();
+
+        if ($('[name=lastfm-include-date-utc]').prop('checked')) {
+          headers.push('dateutc');
+        }
 
         lastFM(requestData(key, user))
         .fail(function (err, msg) {
@@ -185,7 +200,7 @@
             .then(function(tracks){
               var blb = new Blob([
                 tracks.map(function(d){
-                  return row(['artist', 'album', 'name', 'date'], d)
+                  return row(headers, d)
                 })
                 .map(csv).join('\n') + '\n']);
               data[item.i] = blb;
