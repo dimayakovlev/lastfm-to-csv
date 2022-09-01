@@ -46,6 +46,10 @@ function extractTracks(doc){
     for (var i = track.childNodes.length - 1; i >= 0; i--) {
       child = track.childNodes[i];
       obj[child.tagName] = child.textContent;
+      // get date in utc format
+      if (child.nodeName == 'date') {
+        obj['dateutc'] = child.getAttribute('uts');
+      }
     };
     arr.push(obj)
   }
