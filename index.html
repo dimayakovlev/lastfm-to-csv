@@ -1,6 +1,8 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>Last.fm to csv</title>
+  <meta charset="utf-8">
+  <title>Last.fm to CSV</title>
   <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.css">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,16 +12,9 @@
   <div class="container">
 
     <div class="page-header">
-      <h1>
-        Last.fm to csv 
-        <small>
-          <a href="#settings" data-toggle="modal" data-target="#settings">
-            <span class="glyphicon glyphicon-cog"></span>
-          </a>
-        </small>
-      </h1>
+      <h1>Last.fm to CSV</h1><button type="button" title="Custom Settings" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#settings"><span class="glyphicon glyphicon-cog"></span></button>
     </div>
-    <p class="lead">This fetches data from the lastfm api, and formats it as a csv document</p>
+    <p class="lead">This fetches user scrobbling history data from the Last.fm API, and formats it as a CSV document</p>
 
     <div class="alert alert-warning" style="display:none" rv-show="user_error">
       Couldn't find user.
@@ -29,9 +24,9 @@
 
     <form class="form-inline">
       <div class="form-group" rv-class-has-error="user_error">
-        <input type="text" class="form-control input-lg" placeholder="lastfm username" name="lastfm-user" required rv-disabled="submitted">
+        <input type="text" class="form-control" placeholder="Last.fm username" name="lastfm-user" required rv-disabled="submitted">
       </div>
-      <button type="submit" class="btn btn-primary btn-lg"  rv-disabled="submitted">Fetch tracks</button>
+      <button type="submit" class="btn btn-primary" rv-disabled="submitted">Fetch tracks</button>
     </form>
 
     <section id="results" rv-show="submitted" style="display:none">
@@ -65,28 +60,21 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Extra Settings</h4>
+            <h4 class="modal-title">Custom Settings</h4>
           </div>
           <div class="modal-body">
             <div>
-              <p class="lead">
-                Requests to the lastfm api can be rate limited or fail, use these settings if you start having problems
-              </p>
+              <p class="lead">Requests to the Last.fm API can be rate limited or fail, use these settings if you start having problems</p>
               <div class="form-group">
-                <label for="api-key">
-                  alternate api key
-                </label>
+                <label for="api-key">Custom API key</label>
                 <input type="text" class="form-control input-md" id="api-key" placeholder="0123456789abcdef0123456789abcdef" rv-value="api_key">
-                <p class="help-block">Use an alternative api key - generate one at <a href="http://www.last.fm/api">last.fm/api</a></p>
+                <p class="help-block">Use your own API key - generate one at <a href="http://www.last.fm/api" target="_blank">last.fm/api</a></p>
               </div>
               <div class="form-group">
-                <label for="request-delay">
-                  request delay
-                </label>
-                <input type="text" class="form-control input-md" id="request-delay" placeholder="0"  rv-value="request_delay">
-                <p class="help-block">(milliseconds, default 0) how long to wait between making requests</p>
+                <label for="request-delay">Request delay</label>
+                <input type="text" class="form-control input-md" id="request-delay" placeholder="0" rv-value="request_delay">
+                <p class="help-block">How long to wait between making requests (milliseconds, default 0)</p>
               </div>
-            </div>
             <div>
               <p class="lead">Additional data may be useful, use these settings if you want to extend default dataset</p>
               <div class="form-group form-inline">
