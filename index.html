@@ -192,7 +192,7 @@
             })
 
           async.eachSeries(requests, function(item, callback){
-            if(state.cancelled) return callback(false);
+            if (state.cancelled) return callback(false);
 
             state.status = "fetching page " + (item.i) + "/" + page_count;
             lastFM(item.data)
@@ -214,7 +214,7 @@
               setTimeout(callback, parseInt(state.request_delay || '0', 10), false);
             })
           }, function(){
-            state.status = "finished";
+            state.status = state.cancelled ? 'cancelled' : 'finished';
             state.complete = true;
           })
 
