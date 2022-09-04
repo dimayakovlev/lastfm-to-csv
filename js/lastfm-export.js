@@ -70,13 +70,10 @@ function row(keys, obj){
 }
 
 // create a csv row from an array
-function csv(array){
-
+function csv(array) {
   // this is not a world class csv generator
-  return array.map(function(item){
-    return  typeof(item) === 'string' ? 
-      item.replace(/[\",]/g,'') :
-      item;
+  return array.map(function(item) {
+    return '"' + (typeof(item) === 'string' ? item.replace(/"/g,'""') : item) + '"';
   }).join(',')
 }
 
