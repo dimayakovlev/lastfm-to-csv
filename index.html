@@ -90,6 +90,11 @@
             <div>
               <p class="lead">Additional data may be useful, use these settings if you want to extend default dataset</p>
               <div class="form-group form-inline">
+                <input type="checkbox" class="form-control" name="lastfm-include-header-row" id="lastfm-include-header-row">
+                <label for="lastfm-include-header-row">Include header row in output CSV file</label>
+                <p class="help-block">Header row containing information that helps you identify the content of a particular column</p>
+              </div>
+              <div class="form-group form-inline">
                 <input type="checkbox" class="form-control" name="lastfm-include-date-utc" id="lastfm-include-date-utc">
                 <label for="lastfm-include-date-utc">Include dates in UTC format</label>
                 <p class="help-block">Include dates in UTC format to simplify automatic processing of the received data</p>
@@ -138,11 +143,16 @@
       rivets.bind(document, state)
 
 
-      var data = [], bytes = 0;
+      var data = [], headers = [], bytes = 0;
 
       $('[href=#download]').on('click', function(e){
         e.preventDefault();
-        var b = new Blob(data, {type: 'text/csv'})
+        if ($('[name=lastfm-include-header-row]').prop('checked')) {
+          var b = new Blob([headers.map(function(item) { return '"' + item + '"'; }).join(',') + '\n'].concat(data), {type: 'text/csv'})
+        } else {
+          var b = new Blob(data, {type: 'text/csv'})
+        }
+
         saveAs(b, ($('[name=lastfm-user]').val()||"lastFM") + '.csv')
       })
 
@@ -160,9 +170,8 @@
 
         // the data that will be filled with csv
         data = [];
-
-        var headers = ['artist', 'album', 'name', 'date'],
-            delay = $('request-delay').val() || 0,
+        headers = ['artist', 'album', 'name', 'date'];
+        var delay = $('request-delay').val() || 0,
             key   = $('api-key').val() || '974a5ebc077564f72bd639d122479d4b',
             user  = $('[name=lastfm-user]').val();
 
